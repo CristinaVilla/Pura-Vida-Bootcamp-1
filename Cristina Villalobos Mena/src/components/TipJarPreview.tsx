@@ -1,5 +1,6 @@
 import logoBuzon from '../assets/logo-buzon.png'
 import type { TipJarDraft } from '../hooks/useTipJarDraft'
+import { TipJarQr } from './TipJarQr'
 
 type TipJarPreviewProps = {
   draft: TipJarDraft
@@ -23,13 +24,10 @@ export function TipJarPreview({ draft, address }: TipJarPreviewProps) {
         <p>{message || '¡Gracias por apoyar lo que hago!'}</p>
 
         {address ? (
-          <div className="wallet-address">
-            <strong>Dirección pública de Stellar</strong>
-            <code>{address}</code>
-          </div>
+          <TipJarQr key={address} address={address} />
         ) : (
           <div className="qr-placeholder">
-            Conectá tu wallet para mostrar tu dirección pública.
+            Conectá tu wallet para generar el código QR.
           </div>
         )}
       </div>
