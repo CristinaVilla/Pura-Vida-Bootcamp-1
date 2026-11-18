@@ -1,75 +1,50 @@
-# React + TypeScript + Vite
+# Buzón de propinas Stellar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Proyecto del Pura Vida Bootcamp de Oppia Software Labs. Desarrollado por **Cristina Villalobos Mena**.
 
-Currently, two official plugins are available:
+La app permite crear una tarjeta de propinas personalizada, conectar Varial Wallet y compartir la dirección pública de Stellar mediante un QR, el portapapeles o una imagen PNG. Para la demo uso Stellar Testnet. El QR contiene la dirección pública como texto.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Cómo ejecutarlo
 
-## React Compiler
+Usé Node.js 22.16.0. Desde la raíz del repositorio, ejecutá:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd "Cristina Villalobos Mena"
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Abrí la URL que Vite muestre junto a **Local**. Para probar la conexión, usá el mismo perfil de navegador donde está instalada Varial Wallet y seleccioná **Test Net** en la extensión.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Cómo usé Stellar Raven
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Consulté Stellar Raven desde Codex para investigar qué paquete usar para conectar Varial Wallet desde React con TypeScript y qué datos devuelve la API de conexión.
 
+Apliqué esa consulta en `src/stellar/varial.ts`. Uso `isConnected()` para comprobar si la extensión está disponible y `requestAccess()` para solicitar acceso a la dirección pública. Si la solicitud falla, muestro un mensaje que permite reintentar. La consulta no confirmó un código específico de cancelación.
+
+- [Stellar Raven](https://raven.stellar.org/)
+- [Guía de Varial Wallet de Stellar](https://developers.stellar.org/docs/build/guides/freighter)
+- [Cómo configurar Testnet en Varial](https://developers.stellar.org/docs/build/guides/freighter/connect-testnet)
+
+## Pruebas automatizadas
+
+Desde la carpeta del proyecto:
+
+```bash
+npx playwright install chromium
+npm test
+npm run lint
+npm run build
 ```
+
+Las pruebas automatizadas comprueban la actualización de la vista previa, la recuperación del borrador al recargar y el contenido predeterminado cuando los campos contienen solo espacios.
+
+## Pruebas manuales con Varial
+
+| Caso | Resultado esperado |
+| --- | --- |
+| Conectar Varial en Test Net y autorizar el acceso | La tarjeta muestra la misma dirección pública que la extensión. |
+| Intentar conectar desde un perfil sin Varial | La app informa que la extensión no está disponible y permite reintentar. |
+| Cancelar una solicitud de acceso cuando Varial la muestre | La app indica que no pudo obtener acceso y permite reintentar. |
+| Copiar la dirección y escanear el QR de la tarjeta | El texto copiado y el escaneado coinciden con la dirección pública visible. |
+| Descargar la tarjeta y abrir el PNG | La imagen incluye el logo, el nombre, el mensaje, la dirección pública y un QR que se puede escanear. |
