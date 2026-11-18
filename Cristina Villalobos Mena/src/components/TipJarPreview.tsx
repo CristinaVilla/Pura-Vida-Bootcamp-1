@@ -3,9 +3,10 @@ import type { TipJarDraft } from '../hooks/useTipJarDraft'
 
 type TipJarPreviewProps = {
   draft: TipJarDraft
+  address: string | null
 }
 
-export function TipJarPreview({ draft }: TipJarPreviewProps) {
+export function TipJarPreview({ draft, address }: TipJarPreviewProps) {
   const creatorName = draft.creatorName.trim()
   const message = draft.message.trim()
   const title = creatorName
@@ -21,9 +22,16 @@ export function TipJarPreview({ draft }: TipJarPreviewProps) {
         <h3>{title}</h3>
         <p>{message || '¡Gracias por apoyar lo que hago!'}</p>
 
-        <div className="qr-placeholder">
-          Tu código QR aparecerá aquí al conectar la wallet.
-        </div>
+        {address ? (
+          <div className="wallet-address">
+            <strong>Dirección pública de Stellar</strong>
+            <code>{address}</code>
+          </div>
+        ) : (
+          <div className="qr-placeholder">
+            Conectá tu wallet para mostrar tu dirección pública.
+          </div>
+        )}
       </div>
     </section>
   )

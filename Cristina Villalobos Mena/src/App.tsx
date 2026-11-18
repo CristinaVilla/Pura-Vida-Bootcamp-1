@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import logoBuzon from './assets/logo-buzon.png'
 import { TipJarEditor } from './components/TipJarEditor'
 import { TipJarPreview } from './components/TipJarPreview'
@@ -6,6 +7,7 @@ import './App.css'
 
 function App() {
   const { draft, setDraft } = useTipJarDraft()
+  const [address, setAddress] = useState<string | null>(null)
 
   return (
     <>
@@ -23,8 +25,13 @@ function App() {
         </div>
 
         <div className="workspace">
-          <TipJarEditor draft={draft} onDraftChange={setDraft} />
-          <TipJarPreview draft={draft} />
+          <TipJarEditor
+            draft={draft}
+            onDraftChange={setDraft}
+            address={address}
+            onWalletConnected={setAddress}
+          />
+          <TipJarPreview draft={draft} address={address} />
         </div>
       </main>
     </>

@@ -8,9 +8,16 @@ import { WalletSection } from './WalletSection'
 type TipJarEditorProps = {
   draft: TipJarDraft
   onDraftChange: (draft: TipJarDraft) => void
+  address: string | null
+  onWalletConnected: (address: string) => void
 }
 
-export function TipJarEditor({ draft, onDraftChange }: TipJarEditorProps) {
+export function TipJarEditor({
+  draft,
+  onDraftChange,
+  address,
+  onWalletConnected,
+}: TipJarEditorProps) {
   return (
     <section className="panel" aria-labelledby="editor-title">
       <h2 id="editor-title">Personalizá tu buzón</h2>
@@ -43,7 +50,7 @@ export function TipJarEditor({ draft, onDraftChange }: TipJarEditorProps) {
         />
       </div>
 
-      <WalletSection />
+      <WalletSection address={address} onConnected={onWalletConnected} />
     </section>
   )
 }

@@ -118,12 +118,17 @@
   border: 0;
   border-radius: 10px;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.wallet-button:hover:not(:disabled) {
+  background: #205544;
 }
 
 .wallet-button:disabled {
   color: #3d5349;
   background: #e0e8df;
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .wallet .wallet-note {
@@ -169,6 +174,22 @@
   border: 1px dashed #9f8a5d;
   border-radius: 12px;
   font-size: 0.875rem;
+}
+
+.wallet-address {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  background: #f7f3e8;
+  border: 1px solid #e3dac8;
+  border-radius: 12px;
+  font-size: 0.875rem;
+}
+
+.wallet-address code {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 720px) {
